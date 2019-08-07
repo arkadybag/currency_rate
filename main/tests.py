@@ -10,9 +10,15 @@ from rest_framework.test import APITestCase
 from main.models import Rate, Currency
 
 
-class CurrencyTestCase(TestCase):
+class TestMixin:
+    RATE = 10
+    VOLUME = 100
+    DATE = datetime.datetime.now().astimezone(tz=UTC)
     CURRENCY = 'BTCUSD'
+    LIMIT = 10
 
+
+class CurrencyTestCase(TestMixin, TestCase):
     def setUp(self):
         Currency.objects.create(name=self.CURRENCY)
 
@@ -21,12 +27,7 @@ class CurrencyTestCase(TestCase):
         self.assertEqual(currency.name, self.CURRENCY)
 
 
-class RateTestCase(TestCase):
-    RATE = 10
-    VOLUME = 100
-    DATE = datetime.datetime.now().astimezone(tz=UTC)
-    CURRENCY = 'BTCUSD'
-
+class RateTestCase(TestMixin, TestCase):
     def setUp(self):
         currency = Currency.objects.create(name=self.CURRENCY)
 
@@ -47,13 +48,7 @@ class RateTestCase(TestCase):
         self.assertEqual(rate.date.isoformat(), self.DATE.isoformat())
 
 
-class RateFunctionsTestCase(TestCase):
-    RATE = 10
-    VOLUME = 100
-    DATE = datetime.datetime.now().astimezone(tz=UTC)
-    CURRENCY = 'BTCUSD'
-    LIMIT = 10
-
+class RateFunctionsTestCase(TestMixin, TestCase):
     def setUp(self):
         currency = Currency.objects.create(name=self.CURRENCY)
 
@@ -82,13 +77,7 @@ class RateFunctionsTestCase(TestCase):
         self.assertEqual(avg_volume['volume__avg'], 104.5)
 
 
-class ApiTestCase(APITestCase):
-    RATE = 10
-    VOLUME = 100
-    DATE = datetime.datetime.now().astimezone(tz=UTC)
-    CURRENCY = 'BTCUSD'
-    LIMIT = 10
-
+class ApiTestCase(TestMixin, APITestCase):
     def setUp(self):
         self.user = User.objects.create_user('test', password='test')
         currency = Currency.objects.create(name=self.CURRENCY)
