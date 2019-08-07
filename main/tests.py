@@ -37,7 +37,7 @@ class RateTestCase(TestCase):
             volume=self.VOLUME
         )
 
-    def test_get_currency(self):
+    def test_get_rate(self):
         currency = Currency.objects.get(name=self.CURRENCY)
         rate = Rate.objects.filter(currency=currency).first()
 
