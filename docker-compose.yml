@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:11
+    volumes:
+      - database:/var/lib/postgresql/data/pgdata
+    environment:
+      POSTGRES_DB: jibrel
+      POSTGRES_USER: jibrel
+      POSTGRES_PASSWORD: jibrel
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
+
+  service:
+    image: 'jibrel'
+    build: .
+    command: '/usr/local/bin/python3 /jibrel/manage.py runserver 0.0.0.0:8000'
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    environment:
+      - host=db
+      - port=5432
+      - pguser=jibrel
+      - dbname=jibrel
+      - password=jibrel
+    restart: always
+
+
+volumes:
+  database:
