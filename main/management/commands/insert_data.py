@@ -31,7 +31,7 @@ class Command(BaseCommand):
             for r in rates:
                 _rate = _Rate(*r)
 
-                # division need because BITFINEX API return MTS lime millisecond time stamp
+                # division need because BITFINEX API return MTS like millisecond time stamp
                 # but python datetime.datetime.fromtimestamp required seconds
                 mts = (
                     datetime.datetime
